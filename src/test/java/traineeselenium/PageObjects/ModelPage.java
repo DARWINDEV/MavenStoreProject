@@ -1,27 +1,20 @@
 package traineeselenium.PageObjects;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import traineeselenium.AbstractComponents.AbstractComponents;
 
+import traineeselenium.AbstractComponents.AbsComponents;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-public class StandAloneTest {
+
+public class ModelPage {
     public static void main(String[] args) throws IOException {
 
         String productName = "Blue Jeans";
+        String prodQuantity = "5";
 
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
@@ -30,111 +23,71 @@ public class StandAloneTest {
         LandingPage landingPage = new LandingPage(driver);
         landingPage.goTo();
 
-        AbstractComponents absComponent = new AbstractComponents(driver);
+        AbsComponents absComponent = new AbsComponents(driver);
         absComponent.logIn();
-        takeScreenshot(driver);
+        absComponent.takeScreenshot(driver);
 
         landingPage.loginApp("d12311203@gmail.com", "D4rwinTestFun");
-        takeScreenshot(driver);
+        absComponent.takeScreenshot(driver);
 
-        driver.findElement(By.xpath("//div[@class='header-menu']//a[@href='/apparel-shoes']")).click();
-        takeScreenshot(driver);
+        absComponent.apparel();
+        absComponent.takeScreenshot(driver);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='item-box']")));
+        absComponent.waitElementToAppear(By.cssSelector("div[class='item-box']"));
 
-        List<WebElement> products = driver.findElements(By.cssSelector("div[class='item-box']"));
+        CataloguePage catalogue = new CataloguePage(driver);
+        catalogue.getProductList();
+        catalogue.getProduct(productName);
+        absComponent.takeScreenshot(driver);
 
-        products.stream().filter(product ->
-                product.findElement(By.cssSelector("h2")).getText().equalsIgnoreCase(productName)).findAny().get().click();
-        takeScreenshot(driver);
+        ProductDescriptionPage prodPage = new ProductDescriptionPage(driver);
+        prodPage.productQuantity(prodQuantity);
+        absComponent.takeScreenshot(driver);
 
-        WebElement cantidad = driver.findElement(By.id("addtocart_36_EnteredQuantity"));
-        cantidad.clear();
-        cantidad.sendKeys("5");
-        driver.findElement(By.cssSelector("div[class='add-to-cart-panel'] input:last-of-type")).click();
-        takeScreenshot(driver);
+        absComponent.cart();
+        absComponent.takeScreenshot(driver);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#bar-notification")));
-        String message = driver.findElement(By.cssSelector("#bar-notification p")).getText();
-        Assert.assertTrue(message.equalsIgnoreCase("The product has been added to your shopping cart"));
-        takeScreenshot(driver);
-        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector("#bar-notification"))));
+        absComponent.termsAccept();
+        absComponent.setCheckoutBtn();
+        absComponent.takeScreenshot(driver);
 
 
-        driver.findElement(By.cssSelector("li#topcartlink")).click();
-        takeScreenshot(driver);
+//      Billing address
+        CheckOutPage checkout = new CheckOutPage(driver);
 
-        driver.findElement(By.id("termsofservice")).click();
-        driver.findElement(By.id("checkout")).click();
-        takeScreenshot(driver);
+        checkout.billingForm("Capgeminy", "Tuxtla Gutierrez", "Test 1", "Test 2", "Mexico",
+                "29000", "555555", "666666");
+        absComponent.takeScreenshot(driver);
 
-        //        Billing address
-        driver.findElement(By.id("BillingNewAddress_Company")).sendKeys("Capgemini");
-
-        Select countryMenu = new Select(driver.findElement(By.id("BillingNewAddress_CountryId")));
-        countryMenu.selectByVisibleText("Mexico");
-
-
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_City']")).sendKeys("Tuxtla Gutierrez");
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_Address1']")).sendKeys("Test 1");
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_Address2']")).sendKeys("test2");
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_ZipPostalCode']")).sendKeys("99999");
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_PhoneNumber']")).sendKeys("555555");
-        driver.findElement(By.xpath("//input[@id='BillingNewAddress_FaxNumber']")).sendKeys("888888");
-        driver.findElement(By.xpath("//div[@id='billing-buttons-container']/input")).click();
-        takeScreenshot(driver);
-
-//        Shipping Address
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[id='PickUpInStore']")));
-        driver.findElement(By.cssSelector("input[id='PickUpInStore']")).click();
-        driver.findElement(By.xpath("//div[@id='shipping-buttons-container']/input")).click();
-        takeScreenshot(driver);
-
-//        Shipping method and payment method
-        driver.findElement(By.xpath("//form[@id='co-payment-method-form']//input[@id='paymentmethod_2']")).click();
-        driver.findElement(By.xpath("//div[@id='payment-method-buttons-container']/input")).click();
-        takeScreenshot(driver);
-
-//        Payment information
-        driver.findElement(By.xpath("//input[@id='CardholderName']")).sendKeys("Darwin Jimenez Hernandez");
-        driver.findElement(By.xpath("//input[@id='CardNumber']")).sendKeys("5482340924944396");
-        driver.findElement(By.xpath("//input[@id='CardCode']")).sendKeys("699");
-        driver.findElement(By.xpath("//div[@id='payment-info-buttons-container']/input")).click();
-        takeScreenshot(driver);
+////        Shipping Address
+        absComponent.waitElementToAppear(By.cssSelector("input[id='PickUpInStore']"));
+        checkout.shippingForm();
+        absComponent.takeScreenshot(driver);
 
 
-        //confirm order
-//        String total = driver.findElement(By.cssSelector("span[class*='product-price order-total']")).getText();
-        driver.findElement(By.xpath("//div[@id='confirm-order-buttons-container']/input")).click();
-//        Assert.assertTrue(total.equalsIgnoreCase(String.valueOf(5.00)));
-        takeScreenshot(driver);
+////        Shipping method and payment method
+        checkout.paymentForm();
+        absComponent.takeScreenshot(driver);
 
-        //Validar mensaje
+////        Payment information
 
-        String confirmMessage = driver.findElement(By.xpath("//div[@class='title']")).getText();
-        Assert.assertTrue(confirmMessage.equalsIgnoreCase("Your order has been successfully processed!"));
-        takeScreenshot(driver);
+        checkout.infoForm("Darwin Jimenez Hernandez","5482340924944396", "699");
+        absComponent.takeScreenshot(driver);
 
-//        Cerrar sesion
-        driver.findElement(By.cssSelector("[href*='/logout']")).click();
-        takeScreenshot(driver);
+//        Confirm order
 
+        checkout.confirmInfo();
+        absComponent.takeScreenshot(driver);
+
+////      Logout
+
+        absComponent.logOut();
+        absComponent.takeScreenshot(driver);
+
+        driver.quit();
 
 
     }
 
-    public static void takeScreenshot(WebDriver driver) throws IOException {
-        File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        String date = getDate();
-        FileUtils.copyFile(src, new File("Evidencias\\screenshot_"+ date +".png"));
-    }
 
-    public static String getDate(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSS");
-        LocalDateTime now = LocalDateTime.now();
-        String formated = dtf.format(now);
-        System.out.println("Formated: " + formated);
-        return formated;
-    }
 }

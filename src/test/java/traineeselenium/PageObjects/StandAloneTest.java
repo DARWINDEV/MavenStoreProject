@@ -5,8 +5,10 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import traineeselenium.AbstractComponents.AbsComponents;
 
 
 import java.io.File;
@@ -25,14 +27,14 @@ public class StandAloneTest {
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
-        driver.get("https://demowebshop.tricentis.com/electronics");
+        LandingPage landingPage = new LandingPage(driver);
+        landingPage.goTo();
 
-        driver.findElement(By.cssSelector("[href*='/login']")).click();
+        AbsComponents absComponent = new AbsComponents(driver);
+        absComponent.logIn();
         takeScreenshot(driver);
 
-        driver.findElement(By.id("Email")).sendKeys("d12311203@gmail.com");
-        driver.findElement(By.id("Password")).sendKeys("D4rwinTestFun");
-        driver.findElement(By.cssSelector("input[value='Log in']")).click();
+        landingPage.loginApp("d12311203@gmail.com", "D4rwinTestFun");
         takeScreenshot(driver);
 
         driver.findElement(By.xpath("//div[@class='header-menu']//a[@href='/apparel-shoes']")).click();
@@ -70,14 +72,8 @@ public class StandAloneTest {
         //        Billing address
         driver.findElement(By.id("BillingNewAddress_Company")).sendKeys("Capgemini");
 
-        List<WebElement> countries = driver.findElements(By.xpath("//select[@id='BillingNewAddress_CountryId']/option"));
-
-        for (WebElement country : countries){
-            if (country.getText().contains("Mexico")){
-                country.click();
-                break;
-            }
-        }
+        Select countryMenu = new Select(driver.findElement(By.id("BillingNewAddress_CountryId")));
+        countryMenu.selectByVisibleText("Mexico");
 
 
         driver.findElement(By.xpath("//input[@id='BillingNewAddress_City']")).sendKeys("Tuxtla Gutierrez");
@@ -109,7 +105,7 @@ public class StandAloneTest {
 
 
         //confirm order
-        String total = driver.findElement(By.cssSelector("span[class*='product-price order-total']")).getText();
+//        String total = driver.findElement(By.cssSelector("span[class*='product-price order-total']")).getText();
         driver.findElement(By.xpath("//div[@id='confirm-order-buttons-container']/input")).click();
 //        Assert.assertTrue(total.equalsIgnoreCase(String.valueOf(5.00)));
         takeScreenshot(driver);

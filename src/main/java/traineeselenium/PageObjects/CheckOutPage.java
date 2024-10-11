@@ -8,10 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import traineeselenium.AbstractComponents.AbsComponents;
 
-public class PaymentPage extends AbsComponents {
+public class CheckOutPage extends AbsComponents {
     WebDriver driver;
 
-    public PaymentPage(WebDriver driver) {
+    public CheckOutPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -61,6 +61,28 @@ public class PaymentPage extends AbsComponents {
     @FindBy(xpath = "//div[@id='payment-method-buttons-container']/input")
     WebElement paymentBtn;
 
+//  Payment Information
+
+    @FindBy(id = "CardholderName")
+    WebElement cardName;
+
+    @FindBy(id = "CardNumber")
+    WebElement cardNumber;
+
+    @FindBy(id = "CardCode")
+    WebElement cardCode;
+
+    @FindBy(xpath = "//div[@id='payment-info-buttons-container']/input")
+    WebElement infoBtn;
+
+    // Confirm Order
+
+    @FindBy(xpath = "//div[@id='confirm-order-buttons-container']/input")
+    WebElement confirmBtn;
+
+////        String total = driver.findElement(By.cssSelector("span[class*='product-price order-total']")).getText();
+//        driver.findElement(By.xpath("//div[@id='confirm-order-buttons-container']/input")).click();
+////        Assert.assertTrue(total.equalsIgnoreCase(String.valueOf(5.00)));
 
     public void countries(String country){
         Select countryMenu = new Select(driver.findElement(countryID));
@@ -84,6 +106,20 @@ public class PaymentPage extends AbsComponents {
         shippingBtn.click();
     }
 
-    public void paymentForm(
+    public void paymentForm(){
+        pickPayMent.click();
+        paymentBtn.click();
+    }
+
+    public void infoForm(String name, String number, String code){
+        cardName.sendKeys(name);
+        cardNumber.sendKeys(number);
+        cardCode.sendKeys(code);
+        infoBtn.click();
+    }
+
+    public void confirmInfo(){
+        confirmBtn.click();
+    }
 
 }

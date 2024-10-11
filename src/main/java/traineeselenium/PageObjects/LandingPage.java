@@ -4,9 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import traineeselenium.AbstractComponents.AbstractComponents;
+import traineeselenium.AbstractComponents.AbsComponents;
 
-public class LandingPage extends AbstractComponents {
+
+public class LandingPage extends AbsComponents {
 
     WebDriver driver;
 
@@ -25,12 +26,12 @@ public class LandingPage extends AbstractComponents {
     WebElement getPassword;
 
     @FindBy(css="input[value='Log in']")
-    WebElement login;
+    WebElement submit;
 
     public void loginApp(String email, String password){
         getEmail.sendKeys(email);
         getPassword.sendKeys(password);
-        login.click();
+        submit.click();
     }
 
     public void goTo(){

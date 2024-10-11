@@ -5,10 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
-import traineeselenium.AbstractComponents.AbstractComponents;
+import traineeselenium.AbstractComponents.AbsComponents;
 
-public class ProductDescriptionPage extends AbstractComponents {
+
+public class ProductDescriptionPage extends AbsComponents {
 
     WebDriver driver;
 
@@ -35,10 +35,4 @@ public class ProductDescriptionPage extends AbstractComponents {
 
     }
 
-    //
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#bar-notification")));
-//        String message = driver.findElement(By.cssSelector("#bar-notification p")).getText();
-//        Assert.assertTrue(message.equalsIgnoreCase("The product has been added to your shopping cart"));
-//        takeScreenshot(driver);
-//        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector("#bar-notification"))));
 }
