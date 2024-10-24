@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -25,24 +26,12 @@ public class AbsComponents {
     @FindBy(css = "[href*='/login']")
     WebElement loginBtn;
 
-    @FindBy(xpath = "//div[@class='header-menu']//a[@href='/apparel-shoes']")
-    WebElement apparelBtn;
-
-    @FindBy(css = "li#topcartlink")
-    WebElement cartBtn;
-
-    @FindBy(id = "termsofservice")
-    WebElement termsCheck;
-
-    @FindBy(id = "checkout")
-    WebElement checkoutBtn;
-
     @FindBy(css = "a[href*='/logout']")
     WebElement logOutBtn;
 
 
 
-    public void takeScreenshot(WebDriver driver) throws IOException {
+    public void takeScreenshot() throws IOException {
         File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
         String date = getDate();
         FileUtils.copyFile(src, new File("Evidencias\\screenshot_"+ date +".png"));
@@ -66,21 +55,6 @@ public class AbsComponents {
         loginBtn.click();
     }
 
-    public void apparel(){
-        apparelBtn.click();
-    }
-
-    public void cart(){
-        cartBtn.click();
-    }
-
-    public void termsAccept(){
-        termsCheck.click();
-    }
-
-    public void setCheckoutBtn(){
-        checkoutBtn.click();
-    }
 
     public void logOut(){
         logOutBtn.click();

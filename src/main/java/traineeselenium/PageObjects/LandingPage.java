@@ -28,10 +28,18 @@ public class LandingPage extends AbsComponents {
     @FindBy(css="input[value='Log in']")
     WebElement submit;
 
+    @FindBy(xpath = "//div[@class='header-menu']//a[@href='/apparel-shoes']")
+    WebElement apparelBtn;
+
     public void loginApp(String email, String password){
         getEmail.sendKeys(email);
         getPassword.sendKeys(password);
         submit.click();
+    }
+
+    public CataloguePage apparel(){
+        apparelBtn.click();
+        return new CataloguePage(driver);
     }
 
     public void goTo(){
