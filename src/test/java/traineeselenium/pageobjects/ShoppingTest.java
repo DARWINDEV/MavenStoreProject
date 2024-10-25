@@ -1,4 +1,4 @@
-package traineeselenium.PageObjects;
+package traineeselenium.pageobjects;
 
 import org.openqa.selenium.*;
 
